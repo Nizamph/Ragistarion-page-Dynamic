@@ -1,0 +1,89 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise</title>
+</head>
+<body>
+    <script>
+        var posts = [
+            {title: "post one", body: "this is post one", createdAt: new Date().getTime()},
+            {title: "post two", body: "this is post two", createdAt: new Date().getTime()}
+        ]
+        
+        function getPosts() {
+            setInterval(() => {
+                let output = "";
+                for(let i=0;i<posts.length;i++) {
+                    output += `<li>${posts[i].title}-${posts[i].body}->>last updated at ${(Math.floor((new Date().getTime() - posts[i].createdAt))/1000).toFixed(0)} seconds ago</li>`
+                }
+                document.body.innerHTML = output
+            }, 1000)
+        }
+       
+        async function CreatePost(post) {
+            try{
+                const postCreated = await new Promise ((resolve, reject) => {
+                setTimeout(() => {
+                    posts.push({...post, createdAt: new Date().getTime()})
+                    const error = false;
+                    if(!error){
+                        resolve()
+                    }
+                    else{
+                        reject("oops something went wrong")
+                    }
+                },2000)
+            })
+
+            }catch(err) {
+                console.log(err)
+            }
+          
+
+        }
+       CreatePost({title:'post three',body:'this is post three'})
+       CreatePost({title:'post four',body:'this is post four'})
+      
+
+      async function deletePost(){
+        try{
+            const  PostsDeleted = await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    
+                    if(posts.length > 0){
+                        resolve(posts.pop)
+                    }
+                    else{
+                        reject("Array is empty now. ")
+                    }
+                    posts.pop();
+                },2000)
+            })
+            
+        }catch(err){
+            console.log(err)
+        }
+   
+      
+        }
+        // getPosts()
+        deletePost()
+        getPosts()
+        deletePost()
+        deletePost()
+        // getPosts()
+        deletePost()
+        getPosts()
+        deletePost()
+        
+            
+    </script>
+</body>
+</html>
+/
